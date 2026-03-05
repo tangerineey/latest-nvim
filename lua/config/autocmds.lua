@@ -1,13 +1,5 @@
 local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 
--- highlight yanked text
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = augroup,
-	callback = function()
-		vim.hl.on_yank()
-	end,
-})
-
 -- return to last cursor position
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = augroup,
