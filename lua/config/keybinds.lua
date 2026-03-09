@@ -39,6 +39,8 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
 
+vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
+
 vim.keymap.set("n", "gV", function()
   vim.cmd("vsplit")
   vim.cmd("normal! gD")
