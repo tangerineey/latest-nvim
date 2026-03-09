@@ -3,10 +3,10 @@ vim.g.maplocalleader = " " -- space for localleader
 
 -- better movement in wrapped text
 vim.keymap.set("n", "j", function()
-	return vim.v.count == 0 and "gj" or "j"
+    return vim.v.count == 0 and "gj" or "j"
 end, { expr = true, silent = true, desc = "Down (wrap-aware)" })
 vim.keymap.set("n", "k", function()
-	return vim.v.count == 0 and "gk" or "k"
+    return vim.v.count == 0 and "gk" or "k"
 end, { expr = true, silent = true, desc = "Up (wrap-aware)" })
 
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
@@ -46,17 +46,36 @@ vim.keymap.set("n", "<leader>bc", "<cmd>cclose<CR>", { desc = "Close quickfix me
 vim.keymap.set("n", "<leader>bn", "<cmd>cnext<CR>", { desc = "Next item in quickfix list" })
 vim.keymap.set("n", "<leader>bp", "<cmd>cprev<CR>", { desc = "Previous item in quickfix list" })
 
+local function tag_then_fallback(use_gD)
+    return function()
+        local word = vim.fn.expand("<cword>")
+
+        local ok = pcall(vim.cmd, ("tag %s"):format(vim.fn.fnameescape(word)))
+        if ok then
+            return
+        end
+
+        vim.cmd("normal! " .. (use_gD and "gD" or "gd"))
+    end
+end
+
+local gd_fallback = tag_then_fallback(false)
+local gD_fallback = tag_then_fallback(true)
+
+vim.keymap.set("n", "gd", gd_fallback, { desc = "tag, else gd" })
+vim.keymap.set("n", "gD", gD_fallback, { desc = "tag, else gD" })
+
 vim.keymap.set("n", "gV", function()
-  vim.cmd("vsplit")
-  vim.cmd("normal! gD")
-end, { desc = "Go to Definition Split" })
+    vim.cmd("vsplit")
+    gD_fallback()
+end, { desc = "Go to definition in vsplit" })
 
 vim.keymap.set("n", "<leader>pa", function() -- show file path
-	local path = vim.fn.expand("%:p")
-	vim.fn.setreg("+", path)
-	print("file:", path)
+    local path = vim.fn.expand("%:p")
+    vim.fn.setreg("+", path)
+    print("file:", path)
 end, { desc = "Copy full file path" })
 
 vim.keymap.set("n", "<leader>td", function()
-	vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = "Toggle diagnostics" })
