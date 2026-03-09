@@ -6,6 +6,7 @@ return {
     },
     config = function()
         vim.g.compile_mode = {
+            default_command = "",
             bang_expansion = true,
         }
 
