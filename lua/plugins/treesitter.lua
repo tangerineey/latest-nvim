@@ -22,6 +22,7 @@ return {
             "bash",
             "lua",
             "python",
+            "make",
         }
 
         local config = require("nvim-treesitter.config")
@@ -48,7 +49,10 @@ return {
                 end
                 vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                 vim.wo[0][0].foldmethod = 'expr'
-                vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+                if args.match ~= "make" then
+                    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end
             end,
         })
     end
