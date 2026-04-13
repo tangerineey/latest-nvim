@@ -23,6 +23,7 @@ return {
             "lua",
             "python",
             "make",
+            "odin",
         }
 
         local config = require("nvim-treesitter.config")
